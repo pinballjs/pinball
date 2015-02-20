@@ -1,2 +1,4 @@
 ## Intro
+
+[![Join the chat at https://gitter.im/pinballjs/pinball](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/pinballjs/pinball?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 work in progress
