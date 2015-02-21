@@ -31,6 +31,7 @@
     "redis": "^0.12.1"
   },
   "devDependencies": {
+    "colors": "^1.0.3",
     "co-mocha": "^1.1.0",
     "measured": "^1.0.0",
     "mocha": "^2.1.0",
