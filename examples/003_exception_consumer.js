@@ -1,15 +1,15 @@
 'use strict';
 
 let co         = require('co');
-let plato      = require('..')();
+let pinball    = require('..')();
 let prettyjson = require('prettyjson');
 let Promise    = require('bluebird');
 require('colors');
 
 // add a transport
-plato.use('eventemitter');
+pinball.use('eventemitter');
 // add a microservice
-plato.add({ role:'salestax', cmd:'calculate' }, calculate);
+pinball.add({ role:'salestax', cmd:'calculate' }, calculate);
 
 let msg = {
     role: 'salestax',
@@ -24,15 +24,15 @@ co(function *() {
 
   try {
 
-    let reply = yield plato.act(msg, 50);
+    let reply = yield pinball.act(msg, 50);
 
     console.log('\nreply is:'.red);
-    console.log(prettyjson.render(plato.clean(reply)));
+    console.log(prettyjson.render(pinball.clean(reply)));
   } catch(e) {
     console.log(e.stack);
   }
 
-  plato.close();
+  pinball.close();
 });
 
 // a microservice is a generator

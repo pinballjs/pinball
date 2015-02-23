@@ -4,7 +4,7 @@ let pinball    = require('../..')();
 let co         = require('co');
 let prettyjson = require('prettyjson');
 let Promise    = require('bluebird');
-let measured   = require('measured');
+let Measured   = require('measured');
 let timer      = new Measured.Timer();
 
 pinball.use('redis');

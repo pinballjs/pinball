@@ -1,7 +1,7 @@
 'use strict';
 
 let co         = require('co');
-let plato      = require('..')();
+let pinball    = require('..')();
 let prettyjson = require('prettyjson');
 let Promise    = require('bluebird');
 require('colors');
@@ -12,8 +12,8 @@ require('colors');
  * services and consumers in the same nodejs process
  * then add a microservice (you can chain method add)
  */
-plato.use('eventemitter')
-     .add({ role:'salestax', cmd:'calculate' }, calculate);
+pinball.use('eventemitter')
+       .add({ role:'salestax', cmd:'calculate' }, calculate);
 
 /**
  * a microservice is a generator
@@ -40,9 +40,9 @@ co(function *() {
   console.log(prettyjson.render(msg));
 
   // yield because it's a promise
-  let reply = yield plato.act(msg);
+  let reply = yield pinball.act(msg);
 
   console.log('\nreply is:'.red);
-  console.log(prettyjson.render(plato.clean(reply)));
+  console.log(prettyjson.render(pinball.clean(reply)));
 });
 
