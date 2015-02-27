@@ -2,8 +2,6 @@
 
 let co         = require('co');
 let pinball    = require('..')();
-let prettyjson = require('prettyjson');
-let promise    = require('bluebird');
 require('colors');
 
 // add a transport
@@ -25,12 +23,12 @@ co(function *start() {
 });
 
 // a microservice is a generator
-function *first(act) {
+function *first(done, act) {
   yield act({ role:'second', cmd:'cmd' });
 }
 
 // a microservice is a generator
-function *second(act) {
+function *second(done, act) {
   yield act({ role:'third', cmd:'cmd' });
 }
 

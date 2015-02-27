@@ -1,5 +1,12 @@
 'use strict';
 
+/**
+ * README
+ * A tap can thow an Error that is sent to bus for monitoring purpose
+ * and it doesn't affect the other microservices.
+ *
+ * DEBUG=pinball:transport node 006_exception_in_tap.js
+ */
 let co         = require('co');
 let pinball    = require('..')('example');
 let prettyjson = require('prettyjson');
@@ -11,8 +18,9 @@ require('colors');
  * services and consumers in the same nodejs process
  * then add a microservice (you can chain method add)
  */
-pinball.use('eventemitter')
-       .add({ role:'salestax', cmd:'calculate' }, calculate);
+pinball.use('eventemitter');
+pinball.add({ role:'salestax', cmd:'calculate' }, calculate);
+pinball.add({ role:'salestax', cmd:'calculate' }, { tap: true }, observe);
 
 /**
  * a microservice is a generator
@@ -21,6 +29,18 @@ pinball.use('eventemitter')
 function *calculate(done) {
   done({ role:'salestax', reply:'calculate', total: this.net * 1.2 });
 }
+
+function *observe() {
+  throw new CustomError('This is a custom error');
+}
+
+function CustomError(message) {
+  Error.call(this);
+  Error.captureStackTrace(this, CustomError);
+  this.message = message;
+  this.name = 'CustomError';
+}
+CustomError.prototype = Object.create(Error.prototype);
 
 // events are plain javascript objects
 let msg = {
@@ -44,4 +64,3 @@ co(function *() {
   console.log('\nreply is:'.red);
   console.log(prettyjson.render(pinball.clean(reply)));
 });
-

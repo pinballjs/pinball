@@ -36,7 +36,7 @@ co(function *() {
 });
 
 // a microservice is a generator
-function *calculate(act, pub) {
+function *calculate(done, act, pub) {
   try {
     yield act({ msg:'This is going to timeout in 100ms'}, 100);
   } catch(e) {
@@ -47,5 +47,5 @@ function *calculate(act, pub) {
   }
   yield pub({msg: 'Broadcast some information'});
 
-  return { role:'salestax', reply:'calculate', total: this.net * 1.2 };
+  done({ role:'salestax', reply:'calculate', total: this.net * 1.2 });
 }

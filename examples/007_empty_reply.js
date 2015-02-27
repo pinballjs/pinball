@@ -12,21 +12,21 @@ require('colors');
  * then add a microservice (you can chain method add)
  */
 pinball.use('eventemitter')
-       .add({ role:'salestax', cmd:'calculate' }, calculate);
+       .add({ role:'disk', cmd:'check' }, disk);
 
 /**
  * a microservice is a generator
  * you need to return a reply
  */
-function *calculate(done) {
-  done({ role:'salestax', reply:'calculate', total: this.net * 1.2 });
+function *disk(done) {
+  done();
 }
 
 // events are plain javascript objects
 let msg = {
-    role: 'salestax',
-    cmd:  'calculate',
-    net:  100
+    role: 'disk',
+    cmd:  'check',
+    disk: 'sda'
 };
 
 /**
@@ -41,7 +41,7 @@ co(function *() {
   // yield because it's a promise
   let reply = yield pinball.act(msg);
 
-  console.log('\nreply is:'.red);
+  console.log('\nreply is empty'.red);
   console.log(prettyjson.render(pinball.clean(reply)));
 });
 

@@ -3,7 +3,7 @@
 let pinball    = require('../..')();
 let co         = require('co');
 let prettyjson = require('prettyjson');
-let Promise    = require('bluebird');
+let promise    = require('bluebird');
 let Measured   = require('measured');
 let timer      = new Measured.Timer();
 
@@ -11,7 +11,7 @@ pinball.use('redis');
 
 co(function *() {
   let counter = 0;
-  yield Promise.delay(10);
+  yield promise.delay(10);
   for(;;) {
     try {
       let stopwatch = timer.start();
@@ -25,7 +25,7 @@ co(function *() {
 
 co(function *() {
   for(;;) {
-    yield Promise.delay(1000);
+    yield promise.delay(1000);
     console.log(prettyjson.render(timer.toJSON()));
   }
 });
