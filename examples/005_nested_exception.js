@@ -14,7 +14,7 @@ pinball.add({ role:'second', cmd:'cmd' }, second);
 pinball.add({ role:'third', cmd:'cmd' }, third);
 
 // consumer of a microservice
-co(function *() {
+co(function *start() {
   try {
     yield pinball.act({ role:'first', cmd:'cmd' });
   } catch(e) {

@@ -24,6 +24,7 @@
   "dependencies": {
     "axon": "^2.0.1",
     "bluebird": "^2.9.10",
+    "callsite": "^1.0.0",
     "co": "^4.4.0",
     "debug": "^2.1.1",
     "lodash": "^3.2.0",
