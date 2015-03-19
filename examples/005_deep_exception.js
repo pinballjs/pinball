@@ -1,11 +1,12 @@
 'use strict';
 
-let co         = require('co');
-let pinball    = require('..')();
+let co      = require('co');
+let pinball = require('..')();
+let promise = require('bluebird');
 require('colors');
 
 // add a transport
-pinball.use('eventemitter');
+pinball.use('redis');
 // add a microservice
 pinball.add({ role:'first', cmd:'cmd' }, first);
 pinball.add({ role:'second', cmd:'cmd' }, second);
@@ -13,6 +14,7 @@ pinball.add({ role:'third', cmd:'cmd' }, third);
 
 // consumer of a microservice
 co(function *start() {
+  yield promise.delay(100);
   try {
     yield pinball.act({ role:'first', cmd:'cmd' });
   } catch(e) {
