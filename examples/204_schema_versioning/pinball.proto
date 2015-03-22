@@ -1,0 +1,52 @@
+package pinball;
+
+message Metadata {
+  optional string uuid      = 1;
+  optional string txid      = 2;
+  optional string coid      = 3;
+  optional bool   reply     = 4;
+  optional int64  timestamp = 5;
+  optional string file      = 6;
+  optional int32  line      = 7;
+  optional string app       = 8;
+  optional string node      = 9;
+  optional int64  runid     = 10;
+  optional string semver    = 11;
+  optional int32  arity     = 12;
+  optional int32  ttl       = 13;
+  optional bool   noop      = 14;
+  optional int32  ftime     = 15;
+  optional int32  rtime     = 16;
+  optional int32  left      = 17;
+  optional string func      = 18;
+}
+
+// schema id 1
+message ErrorEvent {
+  required int32    schema   = 1 [default = 1];
+  required Metadata metadata = 2;
+
+  message Metadata {
+    optional string uuid      = 1;
+    optional string txid      = 2;
+    optional string coid      = 3;
+    optional bool   reply     = 4;
+    optional bool   pub       = 5;
+    optional int64  timestamp = 6;
+    optional string app       = 7;
+    optional string node      = 8;
+    optional int64  runid     = 9;
+    optional string semver    = 10;
+    required Error  error     = 11;
+
+    message Error {
+      required string name    = 1;
+      required string message = 2;
+      required string stack   = 3;
+    }
+  }
+}
+
+message PeekSchema {
+  required int32 schema = 1;
+}
