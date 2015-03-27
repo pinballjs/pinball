@@ -1,62 +1,14 @@
 'use strict';
 
-let _ = require('lodash');
-_.mixin(require('lodash-deep'));
-
 let co         = require('co');
 let pinball    = require('../..')('example');
 let prettyjson = require('prettyjson');
 let promise    = require('bluebird');
 let ProtoBuf   = require('protobufjs');
-let builder    = ProtoBuf.newBuilder({populateAccessors: false});
-ProtoBuf.loadProtoFile('pinball.proto', builder);
-ProtoBuf.loadProtoFile('helloworld.proto', builder);
+ProtoBuf.populateAccessors = false;
+let builder    = ProtoBuf.loadProtoFile('helloworld.proto');
 let root       = builder.build();
 require('colors');
-
-function flat(element) {
-  let res = [];
-  for (let key in element) {
-    if (!~['decode', 'decodeDelimited', 'decode64', 'decodeHex'].indexOf(key)) {
-      let rest = element[key];
-      if (typeof rest === 'object') {
-        for (let right of flat(element[key])) {
-          res.push(`${ key }.${ right }`);
-        }
-      } else {
-        res.push(key);
-        for (let right of flat(element[key])) {
-          res.push(`${ key }.${ right }`);
-        }
-      }
-    }
-  }
-  return res;
-}
-
-let ds = flat(builder.result);
-// console.log(prettyjson.render(ds));
-
-function flat(T) {
-  let res = [];
-  for (let ns of T.getChildren(ProtoBuf.Reflect.Namespace)) {
-    let rest = ns.getChildren(ProtoBuf.Reflect.Namespace);
-    if (rest.length > 0) {
-      if (ns instanceof ProtoBuf.Reflect.Message) {
-        res.push(ns.name);
-      }
-      for (let right of flat(ns)) {
-        res.push(`${ ns.name }.${ right }`);
-      }
-    } else {
-      res.push(ns.name);
-    }
-  }
-  return res;
-}
-console.log(flat(builder.lookup()));
-
-process.exit(0);
 
 let options = {
   decode: decode(root, '@'),
@@ -110,13 +62,12 @@ function encode(root, prefix) {
     if (schemaId !== null) {
       let klass;
       if (schemaId === 1) {
-        klass = root.pinball.ErrorEvent.Metadata;
+        klass = root.ErrorEvent.Metadata;
       } else {
-        klass = root.pinball.Metadata;
+        klass = root.Metadata;
       }
       let metadata = createMetadata(klass, msg, prefix);
-      let Message  = _.deepGet(root, schemaIdToName(schemaId));
-      let protoMsg = new Message(schemaId, metadata);
+      let protoMsg = new root[schemaIdToName(schemaId)](schemaId, metadata);
       mergeData(protoMsg, msg, prefix);
       return protoMsg.toBuffer();
     } else {
@@ -137,9 +88,8 @@ function getSchemaId(msg, prefix) {
 
 function decode(root, prefix) {
   return function (msg) {
-    let schemaId = root.pinball.PeekSchema.decode(msg).schema;
-    let Message  = _.deepGet(root, schemaIdToName(schemaId));
-    let protoMsg = Message.decode(msg);
+    let schemaId = root.PeekSchema.decode(msg).schema;
+    let protoMsg = root[schemaIdToName(schemaId)].decode(msg);
     return protoMsgToMsg(protoMsg, prefix);
   };
 }
@@ -181,11 +131,11 @@ function mergeData(protoMsg, msg, prefix) {
 
 function schemaIdToName(id) {
   if (id === 10) {
-    return 'helloworld.SalestaxCalculateCmd';
+    return 'SalestaxCalculateCmd';
   } else if (id === 11) {
-    return 'helloworld.SalestaxCalculateReply';
+    return 'SalestaxCalculateReply';
   } else if (id === 1) {
-    return 'pinball.ErrorEvent';
+    return 'ErrorEvent';
   }
 }
 

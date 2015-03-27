@@ -1,0 +1,66 @@
+package foo;
+
+message Metadata {
+  optional string uuid      = 1;
+  optional string txid      = 2;
+  optional string coid      = 3;
+  optional bool   reply     = 4;
+  optional int64  timestamp = 5;
+  optional string file      = 6;
+  optional int32  line      = 7;
+  optional string func      = 8;
+  optional string app       = 9;
+  optional string node      = 10;
+  optional int64  runid     = 11;
+  optional string semver    = 12;
+  optional int32  arity     = 13;
+  optional int32  ttl       = 14;
+  optional bool   noop      = 15;
+  optional int32  ftime     = 16;
+  optional int32  rtime     = 17;
+  optional int32  left      = 18;
+}
+
+// schema id 1
+message ErrorEvent {
+  required int32    schema   = 1 [default = 1];
+  required Metadata metadata = 2;
+
+  message Metadata {
+    optional string uuid      = 1;
+    optional string txid      = 2;
+    optional string coid      = 3;
+    optional bool   reply     = 4;
+    optional bool   pub       = 5;
+    optional int64  timestamp = 6;
+    optional string app       = 7;
+    optional string node      = 8;
+    optional int64  runid     = 9;
+    optional string semver    = 10;
+    required Error  error     = 11;
+
+    message Error {
+      required string name    = 1;
+      required string message = 2;
+      required string stack   = 3;
+    }
+  }
+}
+
+// schema id 10
+message SalestaxCalculateCmd {
+  required int32    schema   = 1 [default = 10];
+  required Metadata metadata = 2;
+  required int64    net      = 3;
+}
+
+// schema id 11
+message SalestaxCalculateReply {
+  required int32    schema   = 1 [default = 11];
+  required Metadata metadata = 2;
+  required int64    total    = 3;
+}
+
+message PeekSchema {
+  required int32 schema = 1;
+}

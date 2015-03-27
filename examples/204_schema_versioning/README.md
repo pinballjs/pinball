@@ -7,3 +7,12 @@ required int32 schema = 1 [default = 11];
 
 ## Reserved schema ids
 1: ErrorEvent
+
+* channel: 'pinball'
+* protoFiles: ['file.proto']
+* prefix: '@',
+* json: true|[false]
+* schemaFieldName: 'schema'
+* metadataFieldName: 'metadata'
+* remove schema key from reply
+* partitionFieldName: 'partition'
